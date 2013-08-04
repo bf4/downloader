@@ -88,9 +88,7 @@ class RubyTapasDownloader
 
 
     puts "downloading files"
-    download_episodes.each do |episode|
-      download_episode(episode)
-    end
+    download_episodes
   end
 
   private
