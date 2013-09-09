@@ -8,8 +8,10 @@ It can work interactively or with a config.yml (copy from config.yml.template)
 
 usage
 
+```ruby
     rt = RubyTapasDownloader.new
-    rt.sign_in.download
+    rt.get_episode_list.download
+```
 
 adapted from my earlier script [Download All Software ios movie clips](https://gist.github.com/bf4/4070991)
 
