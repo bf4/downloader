@@ -1,7 +1,7 @@
 require 'fileutils'
 require 'yaml'
 require 'mechanize'
-# require 'forwardable'
+require 'forwardable'
 class RubyTapasDownloader
 
   class XmlParser < Mechanize::File
@@ -30,7 +30,15 @@ class RubyTapasDownloader
         item.at('title').inner_text
       end
       def episode_id
-        title[/\d+/] || video_links.first.text[/[^-]+/]
+        title[/\d+/] ||
+         episode_id_from_video_link(video_links.first) ||
+         "post-#{post_id}"
+      end
+      def episode_id_from_video_link(video_link)
+         video_link && video_link.text[/[^-]+/]
+      end
+      def post_id
+        episode_link.text.match(/post\?id=(\d+)/)[1]
       end
       def episode_link
        item.at('link')
