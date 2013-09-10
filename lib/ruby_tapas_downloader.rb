@@ -26,13 +26,11 @@ class RubyTapasDownloader
 
   def get_episode_list
     log "signing in"
-    # @current_page = Nokogiri::XML(File.read('./feed.xml')).
+    # from debugging offline
+    # page_to_episodes(Nokogiri::XML(File.read(File.join(temp_dir,'feed.xml'))))
     scraper.with_basic_auth(feed_url) do |page|
       page.save!(File.join(temp_dir,'feed.xml'))
-      @all_episodes = page.
-        search('item').map do |item|
-        FeedItem.new(item)
-      end
+      page_to_episodes(page)
     end
 
     self
@@ -50,6 +48,13 @@ class RubyTapasDownloader
   end
 
   private
+
+  def page_to_episodes(page)
+    @all_episodes = page.
+      search('item').map do |item|
+      FeedItem.new(item)
+    end
+  end
 
   def download_episodes
     existing_episodes = Pathname.glob(File.join(download_dir,'*/')).map(&:basename).map(&:to_s)
