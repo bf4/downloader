@@ -46,16 +46,23 @@ class RubyTapasDownloader
       agent.get(url, parameters, referer, headers) # weird api, made explicit here
     end
 
+    def user_agent
+      'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6' # not sure what user_agent_alias I can set
+    end
+
+    def new_agent
+      @agent = Mechanize.new
+      # puts agent.html_parser # == Nokogiri::HTML
+      agent.user_agent = user_agent
+      yield agent if block_given?
+      agent
+    end
   end
 
   class HtmlScraper < Scraper
 
     def initialize_parser
-      # Mechanize.html_parser = Nokogiri::XML
-      @agent = Mechanize.new
-      puts agent.html_parser
-      agent.user_agent = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6' # not sure what user_agent_alias I can set
-      agent
+      new_agent
     end
 
   end
@@ -63,14 +70,12 @@ class RubyTapasDownloader
   class XmlScraper < Scraper
 
     def initialize_parser
-      # Mechanize.html_parser = Nokogiri::XML
-      @agent = Mechanize.new
-      # puts @agent.html_parser
-      agent.user_agent = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6' # not sure what user_agent_alias I can set
-      # agent.pluggable_parser.default = Mechanize::Page
-      agent.pluggable_parser['application/xml'] = XmlParser
-      agent.pluggable_parser['application/rss+xml'] = XmlParser
-      agent
+      new_agent do |agent|
+        # agent.pluggable_parser.default = Mechanize::Page
+        # ? Mechanize.html_parser = Nokogiri::XML
+        agent.pluggable_parser['application/xml'] = XmlParser
+        agent.pluggable_parser['application/rss+xml'] = XmlParser
+      end
     end
 
   end
