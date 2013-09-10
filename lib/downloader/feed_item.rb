@@ -15,7 +15,7 @@ class RubyTapasDownloader
        video_link && video_link.text[/[^-]+/]
     end
     def post_id
-      episode_link.text.match(/post\?id=(\d+)/)[1]
+      episode_link.text.match(/post\?id=(\d+)/)[1].to_i
     end
     def episode_link
      item.at('link')

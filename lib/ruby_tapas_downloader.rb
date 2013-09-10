@@ -59,6 +59,7 @@ class RubyTapasDownloader
     if new_episodes.size.zero?
       log "everything is downloaded"
     else
+      update_episode_list
       log "already downloaded \n\t#{old_episodes.map(&:episode_id).join("\n\t")}"
       log "downloading \n\t#{new_episodes.map(&:episode_id).join("\n\t")}"
     end
@@ -109,7 +110,6 @@ class RubyTapasDownloader
   end
 
   def set_credentials
-
     config = Config.new(lib_root)
     if config.valid_config?
       @my_email = config.my_email
@@ -120,9 +120,16 @@ class RubyTapasDownloader
       log "enter password"
       @my_password = gets.chomp
     end
-
   end
+
+  def update_episode_list
+    File.open(File.join(download_dir, 'episodes.yml'), 'w') do |file|
+      file.write YAML.dump(all_episodes.sort_by(&:post_id).map do |episode| {episode.episode_id => episode.title} end )
+    end
+  end
+
   def log(msg='')
     puts msg
   end
+
 end
