@@ -28,7 +28,7 @@ class RubyTapasDownloader
 
     def sign_in(signin_url)
       page = agent.get(signin_url)
-      page.save!('index.html')
+      yield page if block_given?
       form = page.form
       form.field_with('username').value = @username
       form.field_with('password').value = @password

@@ -3,8 +3,8 @@ class RubyTapasDownloader
 
   class Config
     attr_reader :config
-    def initialize
-      config_file = File.join(File.dirname(__FILE__),'config.yml')
+    def initialize(lib_root)
+      config_file = File.join(lib_root,'config.yml')
       if File.exists?(config_file)
         @config = YAML::load(File.read(config_file))
       end
