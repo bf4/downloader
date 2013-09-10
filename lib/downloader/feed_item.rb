@@ -5,9 +5,11 @@ class RubyTapasDownloader
       item.at('title').inner_text
     end
     def episode_id
-      title[/\d+/] ||
-       episode_id_from_video_link(video_links.first) ||
+      @episode_id ||= [
+       (title[/\d+/] || episode_id_from_video_link(video_links.first)),
        "post-#{post_id}"
+      ].compact.uniq.
+      join('_')
     end
     def episode_id_from_video_link(video_link)
        video_link && video_link.text[/[^-]+/]

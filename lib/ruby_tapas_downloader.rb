@@ -54,7 +54,7 @@ class RubyTapasDownloader
   def download_episodes
     existing_episodes = Pathname.glob(File.join(download_dir,'*/')).map(&:basename).map(&:to_s)
     old_episodes, new_episodes  = all_episodes.partition do |episode|
-      existing_episodes.include?(episode.episode_id)
+      existing_episodes.include?(episode.episode_id) || existing_episodes.include?(episode.episode_id.split('_')[0])
     end
     if new_episodes.size.zero?
       log "everything is downloaded"
@@ -67,9 +67,7 @@ class RubyTapasDownloader
     end
   end
   def download_episode(episode)
-    episode_number = episode.episode_id
-
-    in_episode_dir(episode_number) do
+    in_episode_dir(episode.episode_id) do
       File.open("description.html","w+") {|file| file.write(episode.description) }
       File.open("item.html","w+") {|file| file.write(episode.item.text) }
       episode.download_links.each do |link|
@@ -89,9 +87,9 @@ class RubyTapasDownloader
     log "success"
   end
 
-  def in_episode_dir(episode_number, &block)
-    log "****** #{episode_number}"
-    episode_dir = File.join(download_dir,episode_number)
+  def in_episode_dir(episode_id, &block)
+    log "****** #{episode_id}"
+    episode_dir = File.join(download_dir,episode_id)
     FileUtils.mkdir_p(episode_dir)
     Dir.chdir(episode_dir) do
       yield
