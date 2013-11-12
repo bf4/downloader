@@ -37,3 +37,7 @@ by Benjamin Fleischer
 ## License
 
 MIT license
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/bf4/downloader/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
