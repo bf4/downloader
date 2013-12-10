@@ -7,6 +7,8 @@ if __FILE__ == $0
 
   redirect_range = (300..399)
   base_url = "http://pragprog.com/magazines/download/ISSUE.FORMAT"
+  # should check for most recent release
+  #   http://pragprog.com/magazines.opds
   issues = (1..49).map(&:to_s)
   formats = %w(HTML PDF epub mobi)
   root = File.expand_path('..', __FILE__)
