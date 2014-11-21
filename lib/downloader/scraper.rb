@@ -37,7 +37,9 @@ class RubyTapasDownloader
     end
 
     def get(url)
-      agent.get(url)
+      yield agent.get(url)
+    rescue Net::HTTPServiceUnavailable, Mechanize::ResponseCodeError
+      puts "failed getting #{url}, #{$!.inspect}"
     end
 
     # currently unused

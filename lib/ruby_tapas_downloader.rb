@@ -87,10 +87,11 @@ class RubyTapasDownloader
     name = link.text
     href = link.href
     print "downloading #{name} from #{href}... "
-    file = scraper.get(href)
-    print "saving #{name}...(#{file.filename}) "
-    file.save!(file.filename)
-    log "success"
+    scraper.get(href) do |file|
+      print "saving #{name}...(#{file.filename}) "
+      file.save!(file.filename)
+      log "success"
+    end
   end
 
   def in_episode_dir(episode_id, &block)
