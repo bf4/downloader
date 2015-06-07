@@ -1,3 +1,4 @@
+require_relative "expand_url"
 require "net/https"
 module Errors
   class ConnectionError < StandardError; end
@@ -23,7 +24,10 @@ class Http
     if options.any?
       fail Error, "unknown options '#{options.inspect}'"
     end
-    new(url, timeout, max_tries)
+    # new(url, timeout, max_tries)
+
+    client = ExpandUrl::HttpRequest.new(url, :no_previous_url)
+    client.response(Net::HTTP::Get, max_tries)
   end
 
   def initialize(url, timeout=60,max_tries=1)
