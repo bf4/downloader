@@ -45,7 +45,7 @@ module ExpandUrl
     require 'timeout'
     HTTP_ERRORS = [Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, Errno::ETIMEDOUT,
          Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError]
-    class BasicResponse < Struct.new(:url, :code, :error); end
+    class BasicResponse < Struct.new(:url, :code, :error); def body; error; end  end
     ExpansionErrors = ::ExpandUrl::ExpansionErrors
     CONNECT_TIMEOUT = 2
 
@@ -74,7 +74,7 @@ module ExpandUrl
       log "Trying again, got #{$!}"
       response(Net::HTTP::Get, retries - 1)
     rescue Timeout::Error, EOFError => e
-      BasicResponse.new(@url, 200, e)
+      BasicResponse.new(@url, 418, e)
     rescue *HTTP_ERRORS, SocketError, Errno::ENETDOWN => e
       raise ExpansionErrors::BadResponse, e.message, e.backtrace
     end

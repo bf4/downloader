@@ -96,7 +96,7 @@ class GetPinboard
         puts "ERROR: #{e.class}: #{e.message}: #{link} : #{filename}"
         page = link
         readable_page = link
-      rescue Timeout::Error, Errno::ETIMEDOUT, Errors::ConnectionError => e
+      rescue Timeout::Error, Errno::ETIMEDOUT, Errors::ConnectionError, ExpandUrl::ExpansionErrors::BadResponse => e
         add_page_download_error(output_file)
         puts "ERROR: #{e.class}: #{e.message}: #{link} : #{filename}"
         # File.open(File.join(@output_dir,build_filename(link)), 'w') {|file| file.write(link) }
