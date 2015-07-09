@@ -32,7 +32,7 @@ class RubyTapasDownloader
       form = page.form
       form.field_with('username').value = @username
       form.field_with('password').value = @password
-      form.checkbox_with('remember_me').check
+      (checkbox = form.checkbox_with('remember_me')) && checkbox.check
       agent.submit(form, form.buttons.first)
     end
 
